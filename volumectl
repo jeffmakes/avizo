@@ -15,12 +15,34 @@ fi
 
 if [[ "$1" == "lower" ]]
 then
-    echo `amixer set Master 5%-` > /dev/null
+    #echo `amixer set Master 5%-` > /dev/null
+    delta=-10%
 elif [[ "$1" == "raise" ]]
 then
-    echo `amixer set Master 5%+` > /dev/null
+    #echo `amixer set Master 5%+` > /dev/null
+    delta=+10%
 fi
 
+#pactl set-sink-volume @DEFAULT_SINK@ $delta
+getdefaultsinkname() {
+    pacmd stat | awk -F": " '/^Default sink name: /{print $2}'
+}
+
+getdefaultsinkvol() {
+    pacmd list-sinks |
+    awk '/^\s+name: /{indefault = $2 == "<'$(getdefaultsinkname)'>"}/^\s+volume: / && indefault {print $5; exit}'
+}
+
+setallsinks() {
+    echo "Setting all sink volumes to $1"
+    for SINK in `pacmd list-sinks | grep 'index:' | cut -b12-`
+    do
+      pactl set-sink-volume $SINK $1
+    done
+}
+echo Getting default sink volume: 
+v=$(getdefaultsinkvol)
+setallsinks $v
 vol=$(amixer get Master | grep -Po "[0-9]+(?=%)" | tail -1)
 off=$(amixer get Master | grep -o "off" | head -n 1)
 
