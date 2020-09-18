@@ -33,3 +33,8 @@ ninja install
 ### Arch User Repository
 
 A package called avizo is also available in the Arch Linux User Repository.
+
+## Jeff's modifications
+
+* I've added some really hacky stuff to set all PA sink volumes equal to that of the default sink
+* Also, the window is now highlighted with a red tint when the sink volume is >100%, so the user knows to balance it by increasing the source volume.
