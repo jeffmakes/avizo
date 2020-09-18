@@ -65,6 +65,9 @@ else
     elif [ "$vol" -lt "101" ]
     then
         avizo-client --image-resource="volume_high" --progress=$scaled --time=$time --background="rgba(255, 255, 255, $alpha)"
+    elif [ "$vol" -lt "150" ]
+    then
+        avizo-client --image-resource="volume_high" --progress=$scaled --time=$time --background="rgba(255, 100, 100, $alpha)"
     fi
 fi
 
